@@ -2,15 +2,43 @@
   "name": "svg-anim",
   "version": "0.1.0",
   "description": "Convert SVG animation into mp4 video",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "main": "./bin/index.js",
+  "bin": {
+    "svg-anim": "./bin/index.js"
   },
-  "keywords": [],
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest",
+    "dev": "ts-node src/index.ts"
+  },
+  "keywords": [
+    "svg",
+    "animation",
+    "video",
+    "mp4",
+    "converter",
+    "smil"
+  ],
   "author": "Jakub T. Jankiewicz <jcubic@onet.pl> (https://jakub.jankiewicz.org/)",
   "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "dependencies": {
-    "@jcubic/lily": "^0.5.0"
+    "@jcubic/lily": "^0.5.0",
+    "puppeteer": "^19.0.0",
+    "puppeteer-screen-recorder": "^3.0.6",
+    "fluent-ffmpeg": "^2.1.3",
+    "handlebars": "^4.7.8",
+    "@xmldom/xmldom": "^0.8.10"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11",
+    "vitest": "^1.6.0",
+    "ts-node": "^10.9.2",
+    "@types/node": "^22.0.0",
+    "@types/fluent-ffmpeg": "^2.1.24"
   }
 }
