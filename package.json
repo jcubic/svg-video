@@ -15,13 +15,8 @@
     "test": "vitest",
     "dev": "ts-node src/index.ts"
   },
-  "keywords": [
-    "svg",
-    "animation",
-    "video",
-    "mp4",
-    "converter",
-    "smil"
+  "files": [
+    "bin/index.js"
   ],
   "dependencies": {
     "@jcubic/lily": "^0.5.0",
@@ -39,6 +34,14 @@
     "@types/node": "^22.0.0",
     "@types/fluent-ffmpeg": "^2.1.24"
   },
+  "keywords": [
+    "svg",
+    "animation",
+    "video",
+    "mp4",
+    "converter",
+    "smil"
+  ],
   "author": "Jakub T. Jankiewicz <jcubic@onet.pl> (https://jakub.jankiewicz.org/)",
   "license": "MIT",
   "repository": {
