@@ -9,5 +9,8 @@
   "keywords": [],
   "author": "Jakub T. Jankiewicz <jcubic@onet.pl> (https://jakub.jankiewicz.org/)",
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@jcubic/lily": "^0.4.0"
+  }
 }
