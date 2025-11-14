@@ -34,16 +34,16 @@ async function main() {
 
     // Extract positional arguments (input and output)
     if (options._.length < 2) {
-      console.error('Usage: svg-anim <input.svg> <output.mp4> [options]');
+      console.error('Usage: svg-video <input.svg> <output.mp4> [options]');
       console.error('\nOptions:');
       console.error('  -w, --width <pixels>    Maximum width (default: from SVG)');
       console.error('  -h, --height <pixels>   Maximum height (default: from SVG)');
       console.error('  -d, --duration <seconds> Override animation duration');
       console.error('  -f, --fps <number>      Frame rate (default: 30)');
       console.error('\nExamples:');
-      console.error('  svg-anim input.svg output.mp4');
-      console.error('  svg-anim input.svg output.mp4 --width 1920 --height 1080');
-      console.error('  svg-anim input.svg output.mp4 -d 10');
+      console.error('  svg-video input.svg output.mp4');
+      console.error('  svg-video input.svg output.mp4 --width 1920 --height 1080');
+      console.error('  svg-video input.svg output.mp4 -d 10');
       process.exit(1);
     }
 

@@ -1,4 +1,4 @@
-# svg-anim
+# svg-video
 
 Convert SVG animations to MP4 video files using headless browser automation.
 
@@ -27,14 +27,14 @@ Install FFmpeg:
 ### Install from npm
 
 ```bash
-npm install -g svg-anim
+npm install -g svg-video
 ```
 
 ### Install from source
 
 ```bash
 git clone <repository-url>
-cd svg-anim
+cd svg-video
 npm install
 npm run build
 npm link
@@ -45,7 +45,7 @@ npm link
 ### Basic Usage
 
 ```bash
-svg-anim input.svg output.mp4
+svg-video input.svg output.mp4
 ```
 
 This will analyze the SVG file, detect animation duration automatically, and create an MP4 video.
@@ -54,16 +54,16 @@ This will analyze the SVG file, detect animation duration automatically, and cre
 
 ```bash
 # Set custom dimensions
-svg-anim input.svg output.mp4 --width 1920 --height 1080
+svg-video input.svg output.mp4 --width 1920 --height 1080
 
 # Override animation duration (5 seconds)
-svg-anim input.svg output.mp4 -d 5
+svg-video input.svg output.mp4 -d 5
 
 # Set custom frame rate
-svg-anim input.svg output.mp4 -f 60
+svg-video input.svg output.mp4 -f 60
 
 # Combine options
-svg-anim input.svg output.mp4 -w 1280 -h 720 -d 10 -f 30
+svg-video input.svg output.mp4 -w 1280 -h 720 -d 10 -f 30
 ```
 
 ### Command Line Options
@@ -100,7 +100,7 @@ Example SVG with SMIL animation:
 For CSS animations or JavaScript-based animations, you must specify the duration manually:
 
 ```bash
-svg-anim animated.svg output.mp4 -d 10
+svg-video animated.svg output.mp4 -d 10
 ```
 
 ## Animation Duration Detection
@@ -117,10 +117,10 @@ For animations with `repeatCount="indefinite"`, the tool now **automatically det
 
 ```bash
 # Automatically detects and records one 76-second loop
-svg-anim animation.svg output.mp4
+svg-video animation.svg output.mp4
 
 # Or manually override the duration
-svg-anim animation.svg output.mp4 -d 10
+svg-video animation.svg output.mp4 -d 10
 ```
 
 The tool intelligently:
@@ -153,13 +153,13 @@ These settings ensure compatibility with:
 ### Example 1: Simple Animation
 
 ```bash
-svg-anim circle-animation.svg circle.mp4
+svg-video circle-animation.svg circle.mp4
 ```
 
 ### Example 2: High Resolution
 
 ```bash
-svg-anim logo-animation.svg logo.mp4 --width 3840 --height 2160
+svg-video logo-animation.svg logo.mp4 --width 3840 --height 2160
 ```
 
 ### Example 3: Infinite Loop Animation
@@ -168,10 +168,10 @@ For an SVG with `repeatCount="indefinite"`, the tool automatically detects the l
 
 ```bash
 # Automatically detects and records one complete loop
-svg-anim infinite-loop.svg output.mp4
+svg-video infinite-loop.svg output.mp4
 
 # Or manually specify duration to capture multiple loops or custom length
-svg-anim infinite-loop.svg output.mp4 -d 10
+svg-video infinite-loop.svg output.mp4 -d 10
 ```
 
 ### Example 4: High Frame Rate
@@ -179,7 +179,7 @@ svg-anim infinite-loop.svg output.mp4 -d 10
 Create smooth 60fps video:
 
 ```bash
-svg-anim animation.svg smooth-output.mp4 -f 60
+svg-video animation.svg smooth-output.mp4 -f 60
 ```
 
 ## Development
@@ -187,7 +187,7 @@ svg-anim animation.svg smooth-output.mp4 -f 60
 ### Project Structure
 
 ```
-svg-anim/
+svg-video/
 ├── src/
 │   ├── index.ts                    # CLI entry point
 │   ├── lib/
@@ -250,7 +250,7 @@ npx ts-node src/index.ts animation.svg output.mp4
 **Solution**: Use the `-d` option to specify how long to record:
 
 ```bash
-svg-anim input.svg output.mp4 -d 10
+svg-video input.svg output.mp4 -d 10
 ```
 
 ### Invalid SVG Dimensions
@@ -323,4 +323,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 - [GitHub Repository](<repository-url>)
 - [Issue Tracker](<repository-url>/issues)
-- [NPM Package](https://www.npmjs.com/package/svg-anim)
+- [NPM Package](https://www.npmjs.com/package/svg-video)

@@ -39,7 +39,7 @@ export function parseTime(timeStr: string): number | null {
  */
 export function getTempFilePath(extension: string): string {
   const randomStr = Math.random().toString(36).substring(2, 15);
-  return join(tmpdir(), `svg-anim-${randomStr}.${extension}`);
+  return join(tmpdir(), `svg-video-${randomStr}.${extension}`);
 }
 
 /**

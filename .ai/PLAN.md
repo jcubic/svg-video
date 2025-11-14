@@ -62,8 +62,8 @@ npm run build
 
 ### Usage
 ```bash
-svg-anim input.svg output.mp4 [options]
-svg-anim [options] input.svg output.mp4
+svg-video input.svg output.mp4 [options]
+svg-video [options] input.svg output.mp4
 ```
 
 ### Options
@@ -75,10 +75,10 @@ svg-anim [options] input.svg output.mp4
 
 ### Examples
 ```bash
-svg-anim input.svg output.mp4
-svg-anim input.svg output.mp4 --width 1920 --height 1080
-svg-anim -w 1280 -h 720 input.svg output.mp4
-svg-anim input.svg output.mp4 -d 10
+svg-video input.svg output.mp4
+svg-video input.svg output.mp4 --width 1920 --height 1080
+svg-video -w 1280 -h 720 input.svg output.mp4
+svg-video input.svg output.mp4 -d 10
 ```
 
 ## Core Components
@@ -233,7 +233,7 @@ svg-anim input.svg output.mp4 -d 10
     "@types/fluent-ffmpeg": "^2.x"
   },
   "bin": {
-    "svg-anim": "./bin/index.js"
+    "svg-video": "./bin/index.js"
   },
   "type": "module"
 }
@@ -275,7 +275,7 @@ svg-anim input.svg output.mp4 -d 10
 
 ## File Structure
 ```
-svg-anim/
+svg-video/
 ├── src/
 │   ├── index.ts              # CLI entry point
 │   ├── lib/
