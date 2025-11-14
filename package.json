@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Convert SVG animation into mp4 video",
   "main": "./bin/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "bin": {
     "svg-video": "./bin/index.js"
   },
@@ -19,12 +23,6 @@
     "converter",
     "smil"
   ],
-  "author": "Jakub T. Jankiewicz <jcubic@onet.pl> (https://jakub.jankiewicz.org/)",
-  "license": "MIT",
-  "type": "module",
-  "engines": {
-    "node": ">=22.0.0"
-  },
   "dependencies": {
     "@jcubic/lily": "^0.5.0",
     "puppeteer": "^19.0.0",
@@ -40,5 +38,11 @@
     "ts-node": "^10.9.2",
     "@types/node": "^22.0.0",
     "@types/fluent-ffmpeg": "^2.1.24"
+  },
+  "author": "Jakub T. Jankiewicz <jcubic@onet.pl> (https://jakub.jankiewicz.org/)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jcubic/svg-video.git"
   }
 }
