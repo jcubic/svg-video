@@ -321,6 +321,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Links
 
-- [GitHub Repository](<repository-url>)
-- [Issue Tracker](<repository-url>/issues)
+- [GitHub Repository](https://github.com/jcubic/svg-video)
+- [Issue Tracker](https://github.com/jcubic/svg-video/issues)
 - [NPM Package](https://www.npmjs.com/package/svg-video)
