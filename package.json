@@ -1,0 +1,13 @@
+{
+  "name": "svg-anim",
+  "version": "0.1.0",
+  "description": "Convert SVG animation into mp4 video",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Jakub T. Jankiewicz <jcubic@onet.pl> (https://jakub.jankiewicz.org/)",
+  "license": "MIT",
+  "type": "module"
+}
