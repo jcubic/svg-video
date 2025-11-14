@@ -1,6 +1,6 @@
 {
   "name": "svg-anim",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Convert SVG animation into mp4 video",
   "main": "./bin/index.js",
   "bin": {
