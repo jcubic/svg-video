@@ -5,15 +5,58 @@ Create an NPM binary tool that converts SVG animations to MP4 video files using 
 
 ## Supported Animation Types
 - **Phase 1**: SMIL animations (SVG `<animate>`, `<animateTransform>`, `<set>` elements)
+  - ✅ **Implemented**: Automatic loop detection for `repeatCount="indefinite"` animations
+  - Detects base loop duration from `dur` attribute
+  - Filters out placeholder/extremely long durations
+  - Records one complete seamless loop automatically
 - **Future**: CSS animations and JavaScript-based animations (can be recorded with manual duration parameter)
 
 ## Technology Stack
-- **Node.js**: Runtime environment
+- **Node.js**: Runtime environment (minimum version: 22.x LTS)
+- **TypeScript**: Type-safe development
+- **Vite**: Build tool (library mode for bundling TypeScript source only)
+- **ts-node**: TypeScript execution for development/testing
 - **Puppeteer**: Headless browser automation for rendering SVG
 - **puppeteer-screen-recorder**: Screen recording capability
 - **@jcubic/lily**: Command-line argument parser
 - **fluent-ffmpeg** (or similar): FFmpeg wrapper for video cropping/processing
 - **Handlebars**: HTML template engine
+
+## Development & Build Setup
+
+### TypeScript Configuration
+- Source code location: `./src/`
+- Build output: `./bin/index.js` (with shebang `#!/usr/bin/env node`)
+- Target: ES2022 (Node.js 22 LTS compatible)
+- Module system: ESM (ES Modules)
+- No `.d.ts` generation (CLI tool only, not a library)
+
+### Build Process
+- **Vite Library Mode**: Bundle only TypeScript source code from `./src/`
+- **Dependencies**: Remain in `node_modules/` (not bundled, resolved at runtime)
+- **Output**: Single executable file at `./bin/index.js`
+
+### Development Workflow
+```bash
+# Manual testing during development (run directly from ./src)
+npx ts-node src/index.ts animation.svg output.mp4
+
+# Run automated tests (Vitest)
+npm test
+
+# Build for production
+npm run build
+```
+
+### Scripts Configuration
+```json
+{
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest"
+  }
+}
+```
 
 ## Command Line Interface
 
@@ -40,14 +83,14 @@ svg-anim input.svg output.mp4 -d 10
 
 ## Core Components
 
-### 1. CLI Entry Point (`index.js`)
+### 1. CLI Entry Point (`src/index.ts`)
 - Parse arguments using `@jcubic/lily`
 - Validate input/output file paths
 - Validate and set default options
 - Orchestrate the conversion workflow
 - Handle errors and provide user feedback
 
-### 2. SVG Parser/Analyzer (`lib/svg-analyzer.js`)
+### 2. SVG Parser/Analyzer (`src/lib/svg-analyzer.ts`)
 - Read and parse SVG file
 - Extract SVG dimensions from attributes or viewBox
 - Detect animation elements (SMIL: `<animate>`, `<animateTransform>`, `<set>`, etc.)
@@ -62,7 +105,7 @@ svg-anim input.svg output.mp4 -d 10
   - Missing duration attributes (skip or use manual duration)
   - Infinite animations (`repeatCount="indefinite"` - use manual duration or error)
 
-### 3. HTML Template Generator (`lib/template-generator.js`)
+### 3. HTML Template Generator (`src/lib/template-generator.ts`)
 - Create Handlebars template with:
   - HTML5 doctype
   - Responsive viewport meta tag
@@ -100,7 +143,7 @@ svg-anim input.svg output.mp4 -d 10
 </html>
 ```
 
-### 4. Video Recorder (`lib/recorder.js`)
+### 4. Video Recorder (`src/lib/recorder.ts`)
 - Initialize Puppeteer browser with appropriate viewport
 - Set viewport size based on width/height parameters
 - Load generated HTML page
@@ -114,7 +157,7 @@ svg-anim input.svg output.mp4 -d 10
   - Frame rate: from CLI options (default 30fps)
   - Video quality settings
 
-### 5. Video Processor (`lib/video-processor.js`)
+### 5. Video Processor (`src/lib/video-processor.ts`)
 - Use fluent-ffmpeg to:
   - Crop video to exact SVG dimensions
   - Convert WebM to MP4 (H.264 codec)
@@ -179,11 +222,20 @@ svg-anim input.svg output.mp4 -d 10
     "puppeteer-screen-recorder": "^3.x",
     "fluent-ffmpeg": "^2.x",
     "handlebars": "^4.x",
-    "xmldom": "^0.6.x" // or jsdom for parsing SVG
+    "@xmldom/xmldom": "^0.8.x"
+  },
+  "devDependencies": {
+    "typescript": "^5.x",
+    "vite": "^5.x",
+    "vitest": "^1.x",
+    "ts-node": "^10.x",
+    "@types/node": "^22.x",
+    "@types/fluent-ffmpeg": "^2.x"
   },
   "bin": {
-    "svg-anim": "./bin/svg-anim.js"
-  }
+    "svg-anim": "./bin/index.js"
+  },
+  "type": "module"
 }
 ```
 
@@ -224,18 +276,24 @@ svg-anim input.svg output.mp4 -d 10
 ## File Structure
 ```
 svg-anim/
+├── src/
+│   ├── index.ts              # CLI entry point
+│   ├── lib/
+│   │   ├── svg-analyzer.ts   # SVG parsing and duration detection
+│   │   ├── template-generator.ts # Handlebars template generation
+│   │   ├── recorder.ts       # Puppeteer recording logic
+│   │   ├── video-processor.ts # FFmpeg processing
+│   │   └── utils.ts          # Utility functions
+│   └── templates/
+│       └── page.hbs          # Handlebars template
 ├── bin/
-│   └── svg-anim.js           # CLI entry point
-├── lib/
-│   ├── svg-analyzer.js       # SVG parsing and duration detection
-│   ├── template-generator.js # Handlebars template generation
-│   ├── recorder.js           # Puppeteer recording logic
-│   ├── video-processor.js    # FFmpeg processing
-│   └── utils.js              # Utility functions
-├── templates/
-│   └── page.hbs              # Handlebars template
+│   └── index.js              # Built output (generated by Vite)
+├── tests/                    # Vitest test files (future)
+├── tsconfig.json             # TypeScript configuration
+├── vite.config.ts            # Vite build configuration
 ├── package.json
 ├── README.md
+├── animation.svg             # Example/test SVG file
 └── .ai/
     └── PLAN.md               # This file
 ```
@@ -254,7 +312,7 @@ svg-anim/
 
 ### Test Files
 - Create sample SVG files for each test case
-- Include the reference file: ejtileanimation20251114130259.svg
+- Use the reference file: `animation.svg` (from OpenClipart)
 
 ## Future Enhancements
 - Support CSS animations detection
@@ -269,36 +327,49 @@ svg-anim/
 
 ## Implementation Phases
 
+### Phase 0: Project Setup
+1. Create TypeScript configuration (`tsconfig.json`)
+2. Create Vite configuration (`vite.config.ts`) for library mode
+3. Set up build script to output to `./bin/index.js` with shebang
+4. Verify ts-node can run `src/index.ts` directly
+5. Install all dependencies (runtime + dev dependencies)
+
 ### Phase 1: Core Functionality
-1. Set up project structure and dependencies
-2. Implement CLI argument parsing
-3. Implement SVG analyzer (basic SMIL duration detection)
-4. Implement template generator
-5. Implement Puppeteer recorder
-6. Implement FFmpeg processor
-7. Wire everything together
+1. Implement CLI argument parsing
+2. Implement SVG analyzer (basic SMIL duration detection)
+3. Implement template generator
+4. Implement Puppeteer recorder
+5. Implement FFmpeg processor
+6. Wire everything together
 
 ### Phase 2: Error Handling & Polish
 1. Add comprehensive error handling
 2. Add input validation
 3. Add progress indicators
 4. Write README with usage examples
-5. Test with various SVG files
+5. Test with various SVG files (including `animation.svg`)
 
 ### Phase 3: Testing & Documentation
-1. Create test suite
-2. Test edge cases
-3. Write comprehensive documentation
-4. Create example SVG files
+1. Set up Vitest for automated testing
+2. Create test suite
+3. Test edge cases
+4. Write comprehensive documentation
+5. Create example SVG files
 
 ## Notes
-- The reference SVG (in `./animation.svg` file) has animations with durations
-ranging from 1s to 76s, with the longest being 76s for infinite repeat transforms
-- For infinite animations (`repeatCount="indefinite"`), we should either:
-  - Require manual duration parameter
-  - Default to recording one complete loop if calculable
-  - Show error/warning to user
+- The reference SVG (in `./animation.svg` file) has animations with durations ranging from 1s to 76s, with some very long durations like 44444s (infinite-like animations)
+- ✅ **Implemented**: Automatic loop detection for infinite animations
+  - The tool now detects `repeatCount="indefinite"` animations
+  - Extracts the base loop duration (e.g., `dur="76s"`)
+  - Filters out placeholder durations (e.g., 44444s) by prioritizing explicit infinite loops
+  - Automatically records one complete seamless loop
+  - Manual duration override still available via `-d` option
 - CSS `max-width` and `max-height` will ensure SVG doesn't overflow the page
 - Using `<img>` tag approach is simpler than inline SVG for initial implementation
 - File path handling should support both absolute and relative paths
 - Temporary files should be created in system temp directory
+- Vite library mode will bundle only the TypeScript source code; dependencies will be resolved from `node_modules/` at runtime
+- The built output at `./bin/index.js` must start with `#!/usr/bin/env node` shebang
+- Node.js 22 LTS is the minimum required version
+- Manual testing during development: `npx ts-node src/index.ts animation.svg output.mp4`
+- Automated tests will use Vitest (future implementation)
