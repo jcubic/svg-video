@@ -48,6 +48,13 @@ npm run build
 npm link
 ```
 
+### Build and run Docker image
+
+```bash
+npm run docker:build
+npm run docker:run input.svg output.mp4
+```
+
 ## Usage
 
 ### Basic Usage
