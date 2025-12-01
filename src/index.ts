@@ -5,6 +5,7 @@ import { generateHTMLFile } from './lib/template-generator.js';
 import { recordAnimation } from './lib/recorder.js';
 import { processVideo, checkFFmpeg } from './lib/video-processor.js';
 import {
+  version,
   fileExists,
   getTempFilePath,
   deleteFile,
@@ -31,22 +32,25 @@ async function main() {
     const options = lily(process.argv.slice(2), {
       parse_args: true,
     }) as CliOptions & { _: string[] };
-
-    // Extract positional arguments (input and output)
-    if (options._.length < 2) {
+    if (options.version) {
+      console.error(version());
+      process.exit(0);
+    } else if (options._.length < 2) {
       console.error('Usage: svg-video <input.svg> <output.mp4> [options]');
       console.error('\nOptions:');
-      console.error('  -w, --width <pixels>    Maximum width (default: from SVG)');
-      console.error('  -h, --height <pixels>   Maximum height (default: from SVG)');
+      console.error('  -w, --width <pixels>     Maximum width (default: from SVG)');
+      console.error('  -h, --height <pixels>    Maximum height (default: from SVG)');
       console.error('  -d, --duration <seconds> Override animation duration');
-      console.error('  -f, --fps <number>      Frame rate (default: 30)');
+      console.error('  -f, --fps <number>       Frame rate (default: 30)');
+      console.error("  -v, --version            Show version number");
       console.error('\nExamples:');
       console.error('  svg-video input.svg output.mp4');
       console.error('  svg-video input.svg output.mp4 --width 1920 --height 1080');
       console.error('  svg-video input.svg output.mp4 -d 10');
-      process.exit(1);
+      process.exit(0);
     }
 
+    // Extract positional arguments (input and output)
     const inputPath = resolve(options._[0]);
     const outputPath = resolve(options._[1]);
 

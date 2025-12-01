@@ -68,10 +68,11 @@ svg-video input.svg output.mp4 -w 1280 -h 720 -d 10 -f 30
 
 ### Command Line Options
 
-- `-w, --width <pixels>` - Maximum width of the output video (default: from SVG)
-- `-h, --height <pixels>` - Maximum height of the output video (default: from SVG)
+- `-w, --width <pixels>`     - Maximum width of the output video (default: from SVG)
+- `-h, --height <pixels>`    - Maximum height of the output video (default: from SVG)
 - `-d, --duration <seconds>` - Override animation duration (optional for infinite loops with detectable duration)
-- `-f, --fps <number>` - Frame rate (default: 30)
+- `-f, --fps <number>`       - Frame rate (default: 30)
+- `-v, --version`            - show version number
 
 ## Supported Animation Types
 

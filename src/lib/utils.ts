@@ -2,6 +2,15 @@ import { access, unlink } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { constants } from 'fs';
+import pkg from '../../package.json' with { type: 'json' };
+
+/**
+ * return version of the library
+ */
+export function version(): string {
+  return `${pkg.name}: ${pkg.version}`;
+}
+
 
 /**
  * Check if a file exists
