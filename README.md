@@ -30,6 +30,14 @@ Install FFmpeg:
 npm install -g svg-video
 ```
 
+### Using Docker
+
+You can use Docker image [jcubic777/svg-video](https://hub.docker.com/repository/docker/jcubic777/svg-video/general)
+
+```
+docker run --rm -v "$(pwd):/project" jcubic777/svg-video:latest animation.svg video.mp4
+```
+
 ### Install from source
 
 ```bash
