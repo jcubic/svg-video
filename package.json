@@ -8,7 +8,7 @@
     "node": ">=22.0.0"
   },
   "bin": {
-    "svg-video": "./bin/index.js"
+    "svg-video": "bin/index.js"
   },
   "scripts": {
     "build": "vite build",
@@ -48,6 +48,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jcubic/svg-video.git"
+    "url": "git+https://github.com/jcubic/svg-video.git"
   }
 }
