@@ -13,7 +13,9 @@
   "scripts": {
     "build": "vite build",
     "test": "vitest",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "docker:build": "docker build -t svg-video .",
+    "docker:run": "docker run --rm -v \"$(pwd):/project\" svg-video"
   },
   "files": [
     "bin/index.js"
