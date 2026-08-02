@@ -81,12 +81,45 @@ svg-video input.svg output.mp4 -f 60
 svg-video input.svg output.mp4 -w 1280 -h 720 -d 10 -f 30
 ```
 
+### Custom CSS
+
+You can customize how the SVG is rendered by injecting your own CSS. The styles are appended
+inside the page's `<style>` block, after the built-in rules, so you can override them or add new
+ones (for example, set a background color, add a filter, or change positioning).
+
+Create a CSS file:
+
+```css
+/* custom.css */
+body {
+  background: white;
+}
+img {
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+}
+```
+
+Then pass it with `--style`:
+
+```bash
+svg-video input.svg output.mp4 --style custom.css
+```
+
+With Docker, mount the project directory (the default) and reference the file by its path inside
+the container:
+
+```bash
+docker run --rm -v "$(pwd):/project" jcubic777/svg-video:latest \
+  animation.svg video.mp4 --style custom.css
+```
+
 ### Command Line Options
 
 - `-w, --width <pixels>`     - Maximum width of the output video (default: from SVG)
 - `-h, --height <pixels>`    - Maximum height of the output video (default: from SVG)
 - `-d, --duration <seconds>` - Override animation duration (optional for infinite loops with detectable duration)
 - `-f, --fps <number>`       - Frame rate (default: 30)
+- `-s, --style <file>`       - Path to a CSS file with extra styles injected into the page
 - `-v, --version`            - show version number
 
 ## Supported Animation Types

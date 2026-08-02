@@ -1,4 +1,5 @@
 import lily from '@jcubic/lily';
+import { readFile } from 'fs/promises';
 import { resolve } from 'path';
 import { analyzeSVG } from './lib/svg-analyzer.js';
 import { generateHTMLFile } from './lib/template-generator.js';
@@ -20,10 +21,12 @@ interface CliOptions {
   height?: number;
   duration?: number;
   fps?: number;
+  style?: string;
   w?: number;
   h?: number;
   d?: number;
   f?: number;
+  s?: string;
 }
 
 async function main() {
@@ -42,6 +45,7 @@ async function main() {
       console.error('  -h, --height <pixels>    Maximum height (default: from SVG)');
       console.error('  -d, --duration <seconds> Override animation duration');
       console.error('  -f, --fps <number>       Frame rate (default: 30)');
+      console.error('  -s, --style <file>       Path to a CSS file with extra styles');
       console.error("  -v, --version            Show version number");
       console.error('\nExamples:');
       console.error('  svg-video input.svg output.mp4');
@@ -59,10 +63,21 @@ async function main() {
     const height = options.height ?? options.h;
     const duration = options.duration ?? options.d;
     const fps = options.fps ?? options.f ?? 30;
+    const stylePath = options.style ?? options.s;
 
     // Validate input file exists
     if (!(await fileExists(inputPath))) {
       throw new ValidationError(`Input file not found: ${inputPath}`);
+    }
+
+    // Load custom CSS file (if provided)
+    let customStyle: string | undefined;
+    if (stylePath) {
+      const resolvedStylePath = resolve(stylePath);
+      if (!(await fileExists(resolvedStylePath))) {
+        throw new ValidationError(`Style file not found: ${resolvedStylePath}`);
+      }
+      customStyle = await readFile(resolvedStylePath, 'utf-8');
     }
 
     // Check if FFmpeg is installed
@@ -131,6 +146,7 @@ async function main() {
         svgPath: inputPath,
         width: finalWidth,
         height: finalHeight,
+        style: customStyle,
       },
       tempHtmlPath
     );

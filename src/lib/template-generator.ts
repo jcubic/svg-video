@@ -6,6 +6,8 @@ export interface TemplateData {
   svgPath: string;
   width: number;
   height: number;
+  /** Extra CSS appended inside the <style> block */
+  style?: string;
 }
 
 // Embedded template
@@ -28,6 +30,7 @@ const TEMPLATE = `<!DOCTYPE html>
       max-height: {{height}}px;
       display: block;
     }
+    {{{style}}}
   </style>
 </head>
 <body>
@@ -47,6 +50,7 @@ export async function generateHTML(data: TemplateData): Promise<string> {
     svgPath: resolve(data.svgPath),
     width: data.width,
     height: data.height,
+    style: data.style ?? '',
   });
 
   return htmlContent;
