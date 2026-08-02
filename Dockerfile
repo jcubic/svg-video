@@ -20,7 +20,10 @@ ENV PUPPETEER_CACHE_DIR=/tmp/puppeteer_cache
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Install svg-video globally (this pulls in puppeteer-core)
-RUN npm install -g svg-video
+# VERSION defaults to the latest published release; CI pins it to the exact
+# version being released so the image matches the npm package.
+ARG VERSION=latest
+RUN npm install -g svg-video@${VERSION}
 
 # Explicitly install matching Chrome via @puppeteer/browsers
 # (Downloads to PUPPETEER_CACHE_DIR; use 'stable' for latest compatible)

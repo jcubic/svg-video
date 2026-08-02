@@ -1,0 +1,85 @@
+name: Publish
+
+# Publish when a GitHub Release is published (a release is always attached to a
+# tag). Draft releases don't fire this; only publishing does.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write # required for npm trusted publishing (OIDC) + provenance
+
+jobs:
+  # The Docker image installs svg-video from npm, so npm must be published first.
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm >= 11.5.1, newer than the npm bundled with
+      # Node 24. No NODE_AUTH_TOKEN / NPM_TOKEN is set — auth is via OIDC.
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: npm ci
+
+      # bin/ is gitignored, so the published main file must be built here.
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test -- run
+
+      - name: Publish
+        run: npm publish
+
+  # Build and push the Docker image, pinned to the version just published to npm.
+  publish-docker:
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Release tags are plain versions (e.g. 0.1.0); strip a leading "v" if present.
+      - name: Resolve version from release tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      # npm can take a moment to serve a freshly published version; wait for it so
+      # the Docker build installs the right one instead of failing or lagging behind.
+      - name: Wait for npm to serve the new version
+        run: |
+          for i in $(seq 1 30); do
+            if npm view "svg-video@${{ steps.version.outputs.version }}" version >/dev/null 2>&1; then
+              echo "svg-video@${{ steps.version.outputs.version }} is available"
+              exit 0
+            fi
+            echo "Waiting for npm to publish the version... (attempt $i)"
+            sleep 10
+          done
+          echo "Timed out waiting for svg-video@${{ steps.version.outputs.version }} on npm"
+          exit 1
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          build-args: |
+            VERSION=${{ steps.version.outputs.version }}
+          tags: |
+            jcubic777/svg-video:${{ steps.version.outputs.version }}
+            jcubic777/svg-video:latest
