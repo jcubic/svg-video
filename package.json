@@ -1,6 +1,6 @@
 {
   "name": "svg-video",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Convert SVG animation into mp4 video",
   "main": "./bin/index.js",
   "type": "module",
@@ -49,5 +49,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jcubic/svg-video.git"
+  },
+  "allowScripts": {
+    "@ffmpeg-installer/linux-x64@4.1.0": true,
+    "esbuild@0.21.5": true,
+    "puppeteer@19.0.0": true
   }
 }
